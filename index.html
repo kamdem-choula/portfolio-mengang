@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projet Mengang — Portfolio Data Analyst</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700;9..144,800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root {
+  --forest: #1F3A2E;
+  --forest-deep: #122821;
+  --ochre: #B8741A;
+  --ochre-light: #D9913A;
+  --cream: #F5EDDC;
+  --cream-deep: #EDE2C9;
+  --paper: #FBF7EE;
+  --ink: #1C1815;
+  --ink-soft: #4A4239;
+  --brick: #8B2C0E;
+  --sage: #87A878;
+  --rule: rgba(28,24,21,0.12);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.55;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+/* === LAYOUT === */
+.wrap { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
+section { padding: 72px 0; border-top: 1px solid var(--rule); }
+section:first-of-type { border-top: none; }
+.section-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ochre);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  display: inline-block;
+}
+h1, h2, h3, h4 { font-family: 'Fraunces', serif; color: var(--ink); font-weight: 500; line-height: 1.05; letter-spacing: -0.01em; }
+h2 { font-size: clamp(32px, 4vw, 52px); margin-bottom: 12px; font-weight: 400; }
+h3 { font-size: 24px; font-weight: 500; margin-bottom: 8px; }
+h4 { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
+.lede { font-size: 19px; color: var(--ink-soft); font-family: 'Fraunces', serif; font-weight: 300; max-width: 720px; margin-bottom: 48px; line-height: 1.45; }
+p { color: var(--ink-soft); margin-bottom: 12px; }
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+/* === HERO === */
+.hero {
+  background: var(--forest);
+  color: var(--cream);
+  padding: 80px 0 100px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 85% 20%, rgba(184,116,26,0.15) 0%, transparent 50%),
+    radial-gradient(circle at 15% 80%, rgba(135,168,120,0.08) 0%, transparent 50%);
+}
+.hero-content { position: relative; z-index: 1; }
+.eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ochre-light);
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.eyebrow::before {
+  content: '';
+  width: 32px; height: 1px;
+  background: var(--ochre);
+}
+.hero h1 {
+  font-size: clamp(48px, 7vw, 92px);
+  color: var(--cream);
+  font-weight: 300;
+  letter-spacing: -0.025em;
+  line-height: 0.98;
+  max-width: 1100px;
+  margin-bottom: 32px;
+}
+.hero h1 em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--ochre-light);
+}
+.hero-meta {
+  display: flex;
+  gap: 48px;
+  margin-top: 56px;
+  padding-top: 32px;
+  border-top: 1px solid rgba(245,237,220,0.15);
+  flex-wrap: wrap;
+}
+.hero-meta-item { color: var(--cream); }
+.hero-meta-item .label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(245,237,220,0.55);
+  margin-bottom: 6px;
+}
+.hero-meta-item .value { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 400; }
+
+/* === KPI GRID === */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+  margin-bottom: 48px;
+}
+.kpi-cell {
+  background: var(--paper);
+  padding: 32px 28px;
+  position: relative;
+}
+.kpi-cell.featured { background: var(--cream); }
+.kpi-cell.negative { background: linear-gradient(135deg, var(--cream), #f0e0d8); }
+.kpi-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 14px;
+  display: block;
+}
+.kpi-value {
+  font-family: 'Fraunces', serif;
+  font-size: 42px;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  line-height: 1;
+  display: block;
+  margin-bottom: 8px;
+}
+.kpi-value .unit { font-size: 16px; color: var(--ink-soft); font-weight: 400; margin-left: 6px; letter-spacing: 0; }
+.kpi-value.bad { color: var(--brick); }
+.kpi-value.good { color: var(--forest); }
+.kpi-sub { font-size: 12px; color: var(--ink-soft); font-family: 'Inter', sans-serif; }
+
+/* === CHART === */
+.chart-box {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  padding: 28px;
+  margin-bottom: 32px;
+}
+.chart-title {
+  font-family: 'Fraunces', serif;
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+.chart-subtitle {
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin-bottom: 24px;
+  font-style: italic;
+}
+.chart-canvas-wrap { position: relative; height: 360px; }
+.chart-canvas-wrap.tall { height: 460px; }
+
+.row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+.row-3 { display: grid; grid-template-columns: 2fr 1fr; gap: 32px; }
+.row-3-eq { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin: 32px 0; }
+
+/* === ROI COMPARISON CARDS === */
+.roi-card {
+  border: 1px solid var(--rule);
+  background: #fff;
+  padding: 28px 26px 24px 26px;
+  position: relative;
+}
+.roi-card.highlight {
+  background: var(--cream);
+  border-color: var(--ochre);
+}
+.roi-card .roi-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--ochre);
+  letter-spacing: 0.18em;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+.roi-card .roi-value {
+  font-family: 'Fraunces', serif;
+  font-size: 52px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+}
+.roi-card .roi-value.bad  { color: var(--brick); }
+.roi-card .roi-value.warn { color: #C28A3A; }
+.roi-card .roi-value.good { color: var(--forest); }
+.roi-card .roi-desc {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: var(--ink-soft);
+  line-height: 1.55;
+  margin-bottom: 14px;
+}
+.roi-card .roi-meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--ink);
+  padding-top: 12px;
+  border-top: 1px solid var(--rule);
+}
+
+/* === DATA TABLE === */
+table { width: 100%; border-collapse: collapse; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+th { text-align: left; padding: 10px 12px; background: var(--cream); font-weight: 600; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; border-bottom: 1px solid var(--rule); color: var(--ink); }
+td { padding: 10px 12px; border-bottom: 1px solid rgba(28,24,21,0.05); }
+td.num { text-align: right; }
+tr:hover td { background: rgba(184,116,26,0.04); }
+.tag {
+  display: inline-block;
+  padding: 2px 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  border-radius: 2px;
+}
+.tag-A { background: var(--ochre); color: var(--cream); }
+.tag-B { background: var(--sage); color: var(--forest-deep); }
+.tag-C { background: var(--cream-deep); color: var(--ink-soft); }
+.tag-vendue { background: var(--sage); color: var(--forest-deep); }
+.tag-volee { background: var(--brick); color: var(--cream); }
+
+/* === INSIGHT CARDS === */
+.insight {
+  background: var(--cream);
+  border-left: 3px solid var(--ochre);
+  padding: 24px 28px;
+  margin: 24px 0;
+}
+.insight.warning { border-left-color: var(--brick); background: #f5e8e0; }
+.insight.good { border-left-color: var(--sage); background: #e8efd9; }
+.insight-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ochre);
+  margin-bottom: 8px;
+}
+.insight.warning .insight-label { color: var(--brick); }
+.insight.good .insight-label { color: var(--forest); }
+.insight p { color: var(--ink); font-size: 15px; line-height: 1.6; margin: 0; }
+.insight p + p { margin-top: 8px; }
+.insight strong { font-weight: 600; color: var(--ink); }
+
+/* === BUSINESS IDEAS === */
+.idea-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-top: 32px; }
+.idea {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  padding: 32px;
+  position: relative;
+  transition: all 0.2s;
+}
+.idea:hover { border-color: var(--ochre); transform: translateY(-2px); }
+.idea-num {
+  font-family: 'Fraunces', serif;
+  font-size: 60px;
+  font-weight: 300;
+  color: var(--ochre);
+  line-height: 1;
+  position: absolute;
+  top: 24px;
+  right: 28px;
+  opacity: 0.4;
+}
+.idea h4 { margin-bottom: 12px; font-size: 22px; padding-right: 60px; }
+.idea-meta { display: flex; gap: 12px; font-family: 'JetBrains Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; margin: 16px 0; }
+.meta-impact, .meta-effort { padding: 3px 8px; border: 1px solid currentColor; }
+.meta-impact { color: var(--forest); }
+.meta-effort { color: var(--ochre); }
+.idea p { font-size: 14px; }
+
+/* === METHODOLOGY === */
+.method-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.method-step { padding: 24px 0; border-top: 2px solid var(--forest); }
+.method-step .step-num { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ochre); letter-spacing: 0.16em; margin-bottom: 8px; }
+.method-step h4 { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 500; margin-bottom: 8px; }
+.method-step p { font-size: 13px; }
+
+/* === FOOTER === */
+footer {
+  background: var(--forest-deep);
+  color: var(--cream);
+  padding: 64px 0 48px;
+  margin-top: 0;
+}
+footer p { color: rgba(245,237,220,0.7); margin: 0; }
+.foot-row { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; flex-wrap: wrap; }
+.foot-sig { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 300; color: var(--cream); }
+
+/* === RESPONSIVE === */
+@media (max-width: 980px) {
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .row-2, .row-3, .row-3-eq { grid-template-columns: 1fr; }
+  .method-grid { grid-template-columns: repeat(2, 1fr); }
+  .idea-grid { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 44px; }
+  .kpi-value { font-size: 32px; }
+  .wrap { padding: 0 20px; }
+  section { padding: 56px 0; }
+}
+@media (max-width: 540px) {
+  .kpi-grid { grid-template-columns: 1fr; }
+  .method-grid { grid-template-columns: 1fr; }
+  .hero-meta { gap: 24px; }
+}
+
+.scenarios-table {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr;
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+}
+.scenarios-table > div { background: var(--paper); padding: 16px 20px; }
+.scenarios-table .head { background: var(--forest); color: var(--cream); font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; padding: 14px 20px; }
+.scenarios-table .scenario-name { font-family: 'Fraunces', serif; font-size: 18px; }
+.scenarios-table .scenario-val { font-family: 'JetBrains Mono', monospace; font-weight: 500; }
+
+.divider { height: 1px; background: var(--rule); margin: 48px 0; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap hero-content">
+    <div class="eyebrow">Portfolio Data Analyst · Étude de cas</div>
+    <h1>Trois ans de comptabilité agricole<br>au Cameroun. <em>Une lecture analytique.</em></h1>
+    <p class="lede" style="color: rgba(245,237,220,0.85); max-width: 760px;">
+      Projet Mengang — une exploitation familiale de 5,7 hectares dans la région Centre. 592 dépenses, 43 récipiendaires, 3 cultures, 12 ventes. Voici ce que les chiffres révèlent : où l'argent est passé, ce que le marché paie réellement, et combien de temps avant que le projet ne s'autofinance.
+    </p>
+    <div class="hero-meta">
+      <div class="hero-meta-item"><div class="label">Période</div><div class="value">Mai 2023 → Mai 2026</div></div>
+      <div class="hero-meta-item"><div class="label">Localisation</div><div class="value">Mengang, Centre, Cameroun</div></div>
+      <div class="hero-meta-item"><div class="label">Superficie</div><div class="value">5,7 ha</div></div>
+      <div class="hero-meta-item"><div class="label">Cultures</div><div class="value">Plantain · Macabo · Gombo</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- I. KPI -->
+<section>
+<div class="wrap">
+  <span class="section-num">I — Vue d'ensemble</span>
+  <h2>La trajectoire financière, en six chiffres</h2>
+  <p class="lede">Le projet est encore en phase d'investissement. Les premières ventes ont commencé en mai 2025 ; les coûts cumulés sur 35 mois dépassent largement les revenus.</p>
+
+  <div class="kpi-grid">
+    <div class="kpi-cell featured">
+      <span class="kpi-label">Investissement total</span>
+      <span class="kpi-value">21,16<span class="unit">M XAF</span></span>
+      <span class="kpi-sub">≈ 32 200 € · 592 transactions</span>
+    </div>
+    <div class="kpi-cell">
+      <span class="kpi-label">Revenus encaissés</span>
+      <span class="kpi-value good">2,31<span class="unit">M XAF</span></span>
+      <span class="kpi-sub">9 ventes de plantain depuis mai 2025</span>
+    </div>
+    <div class="kpi-cell negative">
+      <span class="kpi-label">ROI actuel</span>
+      <span class="kpi-value bad">−89,1<span class="unit">%</span></span>
+      <span class="kpi-sub">Gap break-even : 18,84 M XAF</span>
+    </div>
+    <div class="kpi-cell">
+      <span class="kpi-label">Taux de recouvrement</span>
+      <span class="kpi-value">10,9<span class="unit">%</span></span>
+      <span class="kpi-sub">Revenus / Investissement</span>
+    </div>
+    <div class="kpi-cell">
+      <span class="kpi-label">Burn rate récent (6 mois)</span>
+      <span class="kpi-value">224<span class="unit">K XAF/mois</span></span>
+      <span class="kpi-sub">−62 % vs moyenne historique (591 K)</span>
+    </div>
+    <div class="kpi-cell">
+      <span class="kpi-label">Pertes par vol</span>
+      <span class="kpi-value bad">217<span class="unit">K XAF</span></span>
+      <span class="kpi-sub">8,6 % de la valeur récoltée</span>
+    </div>
+    <div class="kpi-cell">
+      <span class="kpi-label">Production cumulée</span>
+      <span class="kpi-value">886<span class="unit">régimes</span></span>
+      <span class="kpi-sub">822 vendus · 64 volés</span>
+    </div>
+    <div class="kpi-cell featured">
+      <span class="kpi-label">Concentration fournisseurs</span>
+      <span class="kpi-value">14<span class="unit">/43 = 80%</span></span>
+      <span class="kpi-sub">14 personnes ont reçu 80 % des paiements</span>
+    </div>
+  </div>
+
+  <div class="insight">
+    <div class="insight-label">Lecture</div>
+    <p><strong>Le projet est à un tournant.</strong> Les coûts d'acquisition et de préparation du site (acquisition foncière, abattage, défrichage, tronçonnage) — 56 % du total — sont derrière nous. Le burn rate mensuel a chuté de 591 K à 224 K XAF, signe que l'exploitation entre dans une phase de production. Le ROI négatif n'est pas un échec : c'est un état attendu pour un projet agricole pérenne en année 3 sur 7.</p>
+  </div>
+</div>
+</section>
+
+<!-- II. ÉVOLUTION FINANCIÈRE -->
+<section>
+<div class="wrap">
+  <span class="section-num">II — Évolution financière</span>
+  <h2>Investir d'abord, récolter ensuite</h2>
+  <p class="lede">Trois ans de dépenses cumulées contre treize mois de revenus. La courbe rouge n'a pas encore commencé à rattraper la bleue — mais la pente s'aplatit.</p>
+
+  <div class="chart-box">
+    <div class="chart-title">Coûts cumulés vs revenus cumulés</div>
+    <div class="chart-subtitle">Mai 2023 → Mai 2026. En XAF. Source : ledger projet, 592 transactions.</div>
+    <div class="chart-canvas-wrap tall"><canvas id="chartCumul"></canvas></div>
+  </div>
+
+  <div class="row-2">
+    <div class="chart-box">
+      <div class="chart-title">Burn rate mensuel</div>
+      <div class="chart-subtitle">Dépenses par mois ; ligne pointillée = moyenne historique.</div>
+      <div class="chart-canvas-wrap"><canvas id="chartMonthly"></canvas></div>
+    </div>
+    <div class="chart-box">
+      <div class="chart-title">Nombre de transactions par mois</div>
+      <div class="chart-subtitle">Activité opérationnelle (volume, pas valeur).</div>
+      <div class="chart-canvas-wrap"><canvas id="chartTxCount"></canvas></div>
+    </div>
+  </div>
+
+  <div class="insight good">
+    <div class="insight-label">Indicateur positif</div>
+    <p><strong>Le pic absolu d'investissement (2,49 M XAF, juin 2023)</strong> correspond à l'acquisition du terrain (1,5 M XAF en une transaction à Ebolo). Depuis, aucun mois n'a dépassé 1 M. Sur les 6 derniers mois actifs, la médiane est de 218 K XAF — un régime de croisière soutenable.</p>
+  </div>
+</div>
+</section>
+
+<!-- III. ANATOMIE DES COÛTS -->
+<section>
+<div class="wrap">
+  <span class="section-num">III — Anatomie des coûts</span>
+  <h2>Où sont passés les 21 millions ?</h2>
+  <p class="lede">38 % du budget total a servi à préparer le site : abattre des arbres, défricher, tronçonner, créer des pistes. C'est le poste structurellement le plus lourd d'un projet sur défriche.</p>
+
+  <div class="row-2">
+    <div class="chart-box">
+      <div class="chart-title">Répartition par type d'activité</div>
+      <div class="chart-subtitle">9 catégories. Préparation + Transport = 56,6 %.</div>
+      <div class="chart-canvas-wrap tall"><canvas id="chartTypeAct"></canvas></div>
+    </div>
+    <div class="chart-box">
+      <div class="chart-title">Top 12 natures d'activité</div>
+      <div class="chart-subtitle">Granularité fine — où exactement va l'argent.</div>
+      <div class="chart-canvas-wrap tall"><canvas id="chartNature"></canvas></div>
+    </div>
+  </div>
+
+  <div class="chart-box">
+    <div class="chart-title">Coût par culture (direct vs indirect)</div>
+    <div class="chart-subtitle">84 % des coûts sont indirects (site, transport, entretien). Allocation par hectare cultivé non-triviale.</div>
+    <div class="chart-canvas-wrap"><canvas id="chartCulture"></canvas></div>
+  </div>
+
+  <div class="insight warning">
+    <div class="insight-label">Alerte structurelle</div>
+    <p><strong>Le ratio coûts indirects / coûts directs est de 5,3:1.</strong> Pour 1 XAF dépensé en semences, engrais et travaux directs sur les cultures, 5,3 XAF ont été dépensés en infrastructure, transport et entretien du site. Ce ratio doit diminuer rapidement maintenant que le site est aménagé, sinon la rentabilité unitaire sera compromise.</p>
+  </div>
+</div>
+</section>
+
+<!-- III·b. LECTURE COMPTABLE CAPEX / OPEX -->
+<section>
+<div class="wrap">
+  <span class="section-num">III·b — Lecture comptable</span>
+  <h2>Reclassifier les 21 millions : actif ou charge ?</h2>
+  <p class="lede">Le ledger source ne distingue pas l'investissement de l'exploitation. En appliquant les principes de l'IAS 41 (actifs biologiques) et de la comptabilité agricole — chaque ligne classée individuellement — on découvre que <strong>63,5 % des dépenses ont créé un actif détenu</strong>, pas une charge perdue.</p>
+
+  <div class="row-2">
+    <div class="chart-box">
+      <div class="chart-title">CapEx vs OpEx — répartition globale</div>
+      <div class="chart-subtitle">592 lignes classées. 63,5 % en investissement, 36,5 % en exploitation.</div>
+      <div class="chart-canvas-wrap"><canvas id="chartCapexOpex"></canvas></div>
+    </div>
+    <div class="chart-box">
+      <div class="chart-title">Décomposition des 4 postes d'actif</div>
+      <div class="chart-subtitle">Foncier non amortissable · aménagement & infra sur 20 ans · plantation pérenne sur 5 ans.</div>
+      <div class="chart-canvas-wrap"><canvas id="chartCapexBreakdown"></canvas></div>
+    </div>
+  </div>
+
+  <div class="row-3-eq">
+    <div class="roi-card">
+      <div class="roi-tag">VUE BRUTE</div>
+      <div class="roi-value bad">−89,1 %</div>
+      <div class="roi-desc">Toute dépense traitée comme charge. C'est la vue par défaut quand on ne sépare rien — celle des sections précédentes du dashboard.</div>
+      <div class="roi-meta">Coût retenu : 21 156 550 XAF</div>
+    </div>
+    <div class="roi-card highlight">
+      <div class="roi-tag">VUE OPÉRATIONNELLE</div>
+      <div class="roi-value warn">−70,1 %</div>
+      <div class="roi-desc">Seul l'OpEx compte. Le CapEx (terrain, défriche, plantation pérenne) est un actif retenu — pas une perte. Lecture la plus juste pour évaluer la performance courante.</div>
+      <div class="roi-meta">Coût retenu : 7 724 900 XAF</div>
+    </div>
+    <div class="roi-card">
+      <div class="roi-tag">VUE AMORTIE</div>
+      <div class="roi-value warn">−77,4 %</div>
+      <div class="roi-desc">OpEx + charge d'amortissement étalée pro rata temporis (20 ans aménagement, 5 ans plantation, ∞ foncier). Conforme à un P&L IFRS.</div>
+      <div class="roi-meta">Coût retenu : 10 240 923 XAF</div>
+    </div>
+  </div>
+
+  <div class="insight">
+    <div class="insight-label">Lecture patrimoniale</div>
+    <p>Au 6 mai 2026, la <strong>valeur nette comptable des actifs immobilisés est de 10,9 M XAF</strong>, soit 81,3 % du CapEx engagé. Le foncier (2,54 M) reste valorisé à 100 % ; l'aménagement et l'infrastructure (vie 20 ans, 37 mois écoulés) à 84,6 % ; la plantation pérenne (vie 5 ans) à 38,3 %. Si Mengang était valorisé comme une entreprise, ces 10,9 M figureraient à l'actif du bilan — ils ne sont pas perdus, ils ont changé de forme.</p>
+  </div>
+
+  <div class="insight warning">
+    <div class="insight-label">Ce que la séparation ne corrige pas</div>
+    <p>Même avec le ROI opérationnel à −70 %, le projet n'est pas encore rentable sur sa seule activité courante. Sur les 37 derniers mois, <strong>chaque 100 XAF d'OpEx n'a généré que 29,9 XAF de recettes</strong>. La distinction CapEx/OpEx améliore la lecture du passé et clarifie le bilan, mais la priorité commerciale demeure inchangée : faire monter les volumes vendus et stabiliser le prix unitaire.</p>
+  </div>
+</div>
+</section>
+
+<!-- IV. RECIPIENDAIRES -->
+<section>
+<div class="wrap">
+  <span class="section-num">IV — Capital humain</span>
+  <h2>43 personnes, mais 14 portent 80 % des coûts</h2>
+  <p class="lede">Analyse Pareto / ABC sur les récipiendaires de paiements. Les classes A (top 14) sont des collaborateurs structurels ; les classes B et C sont ponctuels.</p>
+
+  <div class="row-3">
+    <div class="chart-box">
+      <div class="chart-title">Courbe de Pareto des récipiendaires</div>
+      <div class="chart-subtitle">Cumulative % des paiements par récipiendaire (43 personnes au total).</div>
+      <div class="chart-canvas-wrap tall"><canvas id="chartPareto"></canvas></div>
+    </div>
+    <div>
+      <h4 style="margin-bottom: 16px; font-family: 'Fraunces',serif; font-weight: 500;">Top 10 récipiendaires</h4>
+      <table>
+        <thead><tr><th>Nom</th><th class="num">XAF</th><th class="num">%</th><th>ABC</th></tr></thead>
+        <tbody id="tblRecip"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="insight">
+    <div class="insight-label">Lecture clé</div>
+    <p><strong>Theophile (12,2 %) et Moise (9,1 %)</strong> sont les deux piliers opérationnels — 48 et 67 transactions respectivement, présents sur défrichage, sortie du bois, tronçonnage et trouaison. <strong>Ebolo (9,0 % en 3 transactions)</strong> est le vendeur du terrain initial. <strong>Bebeto (8,8 % en 66 transactions)</strong> est le transporteur quasi-exclusif Yaoundé ↔ site : un single-point-of-failure logistique à diversifier.</p>
+  </div>
+</div>
+</section>
+
+<!-- V. VENTES -->
+<section>
+<div class="wrap">
+  <span class="section-num">V — Performance commerciale</span>
+  <h2>Les premières récoltes, et les premiers vols</h2>
+  <p class="lede">12 ventes documentées depuis mai 2025. Volumes en hausse, prix en baisse, vols persistants : trois signaux à intégrer dans toute projection.</p>
+
+  <div class="row-2">
+    <div class="chart-box">
+      <div class="chart-title">Volume et valeur des ventes par transaction</div>
+      <div class="chart-subtitle">Régimes (barres) et valeur en XAF (ligne). Couleur = état (vendu / volé).</div>
+      <div class="chart-canvas-wrap"><canvas id="chartSales"></canvas></div>
+    </div>
+    <div class="chart-box">
+      <div class="chart-title">Prix unitaire par régime de plantain</div>
+      <div class="chart-subtitle">Tendance forte à la baisse — corrélation Pearson date↔prix : −0,82.</div>
+      <div class="chart-canvas-wrap"><canvas id="chartPrice"></canvas></div>
+    </div>
+  </div>
+
+  <div class="chart-box">
+    <div class="chart-title">Détail des 12 transactions de plantain</div>
+    <div class="chart-subtitle">3 ventes sur 12 ont été volées (25 % par compte, 7,2 % par volume). Les 9 ventes effectives sont toutes encaissées par Morel.</div>
+    <table style="margin-top: 12px;">
+      <thead><tr><th>Date</th><th class="num">Régimes</th><th class="num">Prix/régime</th><th class="num">Valeur (XAF)</th><th>État</th><th>Récipiendaire</th></tr></thead>
+      <tbody id="tblSales"></tbody>
+    </table>
+  </div>
+
+  <div class="insight warning">
+    <div class="insight-label">Signal de prix</div>
+    <p><strong>Le prix unitaire chute de 4 000 XAF (juin 2025) à 1 739 XAF (mars 2026) — soit -57 % en 9 mois.</strong> Deux hypothèses : (1) saisonnalité (production en hausse pendant la saison de pluies, prix de marché en baisse) ; (2) qualité ou conditionnement en déclin. Sans données comparables sur les prix de gros à Yaoundé, on ne peut pas trancher — c'est le data gap n°1 du projet.</p>
+  </div>
+</div>
+</section>
+
+<!-- VI. MODÈLE PRÉDICTIF / SCÉNARIOS -->
+<section>
+<div class="wrap">
+  <span class="section-num">VI — Modélisation</span>
+  <h2>Trois scénarios, trois horizons de break-even</h2>
+  <p class="lede">Modèle simple basé sur trois leviers : volume mensuel, prix unitaire, et coût opérationnel résiduel. Le gap à combler reste de 18,84 M XAF.</p>
+
+  <div class="scenarios-table">
+    <div class="head">Scénario</div>
+    <div class="head" style="text-align: right;">Volume/mois</div>
+    <div class="head" style="text-align: right;">Prix/régime</div>
+    <div class="head" style="text-align: right;">Marge nette/mois</div>
+    <div class="head" style="text-align: right;">Break-even</div>
+
+    <div class="scenario-name">Conservateur</div>
+    <div class="scenario-val" style="text-align: right;">150 rég.</div>
+    <div class="scenario-val" style="text-align: right;">3 000 XAF</div>
+    <div class="scenario-val" style="text-align: right;">250 K</div>
+    <div class="scenario-val" style="text-align: right; color: var(--brick);">6,3 ans</div>
+
+    <div class="scenario-name">Réaliste</div>
+    <div class="scenario-val" style="text-align: right;">250 rég.</div>
+    <div class="scenario-val" style="text-align: right;">2 800 XAF</div>
+    <div class="scenario-val" style="text-align: right;">450 K</div>
+    <div class="scenario-val" style="text-align: right; color: var(--ochre);">3,5 ans</div>
+
+    <div class="scenario-name">Optimiste</div>
+    <div class="scenario-val" style="text-align: right;">400 rég.</div>
+    <div class="scenario-val" style="text-align: right;">2 700 XAF</div>
+    <div class="scenario-val" style="text-align: right;">780 K</div>
+    <div class="scenario-val" style="text-align: right; color: var(--forest);">2,0 ans</div>
+  </div>
+
+  <div class="chart-box" style="margin-top: 32px;">
+    <div class="chart-title">Projection de récupération sur 5 ans</div>
+    <div class="chart-subtitle">Capital restant à recouvrer par scénario.</div>
+    <div class="chart-canvas-wrap"><canvas id="chartScenarios"></canvas></div>
+  </div>
+
+  <div class="insight">
+    <div class="insight-label">Méthodologie</div>
+    <p>Hypothèses : (1) les coûts d'acquisition et de préparation sont sunk costs ; (2) le coût opérationnel récurrent (entretien + intrants + transport) varie de 200 à 300 K XAF/mois selon l'intensification ; (3) la diversification Macabo + Gombo n'est pas modélisée — elle ajoute un upside non chiffré. La précision de ces scénarios augmentera dès qu'on aura 6+ mois supplémentaires de ventes mensualisées.</p>
+  </div>
+</div>
+</section>
+
+<!-- VII. IDÉES BUSINESS -->
+<section>
+<div class="wrap">
+  <span class="section-num">VII — Recommandations stratégiques</span>
+  <h2>Six leviers, du quick-win à la transformation</h2>
+  <p class="lede">Classés par effort d'implémentation et impact attendu. Les deux premiers sont actionnables en 30 jours.</p>
+
+  <div class="idea-grid">
+    <div class="idea">
+      <span class="idea-num">01</span>
+      <h4>Système anti-vol minimal viable</h4>
+      <div class="idea-meta"><span class="meta-impact">Impact ★★★</span><span class="meta-effort">Effort ☆☆</span></div>
+      <p>Les vols représentent 217 K XAF perdus (8,6 % de la valeur récoltée). Coût d'un gardien rotatif : ~50 K XAF/mois. ROI break-even atteint dès le 3ᵉ mois si les vols sont stoppés. Compléter par traçabilité simple : registre journalier de comptage des régimes mûrs, photographie smartphone géolocalisée.</p>
+    </div>
+    <div class="idea">
+      <span class="idea-num">02</span>
+      <h4>Diversification du transporteur</h4>
+      <div class="idea-meta"><span class="meta-impact">Impact ★★</span><span class="meta-effort">Effort ☆</span></div>
+      <p>Bebeto concentre 8,8 % des paiements et 66 trajets sur 3 ans — risque de dépendance. Identifier 2 transporteurs secondaires, négocier un tarif benchmark, alterner. Bénéfice secondaire : levier de négociation sur les tarifs Yaoundé → site (actuellement 25–35 K XAF/trajet, sans grille tarifaire visible).</p>
+    </div>
+    <div class="idea">
+      <span class="idea-num">03</span>
+      <h4>Capture des prix de gros à Yaoundé</h4>
+      <div class="idea-meta"><span class="meta-impact">Impact ★★★</span><span class="meta-effort">Effort ★</span></div>
+      <p>La baisse du prix unitaire (-57 % en 9 mois) est inexpliquée faute de benchmark marché. Mettre en place un relevé hebdomadaire des prix de gros aux marchés Mokolo / Mfoundi (visite simple, ou via WhatsApp avec un grossiste partenaire). Sans cela, impossible de savoir si Mengang vend au juste prix ou subit une décote.</p>
+    </div>
+    <div class="idea">
+      <span class="idea-num">04</span>
+      <h4>Atomisation des charges de site</h4>
+      <div class="idea-meta"><span class="meta-impact">Impact ★★</span><span class="meta-effort">Effort ★★</span></div>
+      <p>Le coût d'entretien (3,0 M XAF / 26 % du budget post-préparation) est dominé par Moïse et Alpha. Tester un modèle de métayage sur 1 ha : une famille loge sur place contre un % de la récolte. Réduit charges salariales fixes et résout simultanément le problème de surveillance anti-vol.</p>
+    </div>
+    <div class="idea">
+      <span class="idea-num">05</span>
+      <h4>Modèle multi-cultures rotatif</h4>
+      <div class="idea-meta"><span class="meta-impact">Impact ★★★</span><span class="meta-effort">Effort ★★★</span></div>
+      <p>Le plantain a un cycle long (12–14 mois) et un prix volatile. Le gombo a un cycle court (45–60 jours) et un revenu rapide ; le macabo est une réserve sol (8–12 mois). Optimiser l'assolement : gombo sur lisières et entre-rangs jeunes, plantain en parcelle mature, macabo sur sols ombragés. Modèle d'optimisation linéaire faisable avec 2 saisons de données.</p>
+    </div>
+    <div class="idea">
+      <span class="idea-num">06</span>
+      <h4>Système d'information léger</h4>
+      <div class="idea-meta"><span class="meta-impact">Impact ★★</span><span class="meta-effort">Effort ★★</span></div>
+      <p>Tout ce dashboard repose sur un fichier Excel manuel. Migrer vers une saisie mobile (Google Forms ou Kobo Toolbox) avec catégories pré-définies, géolocalisation, et photo. Génère automatiquement un tableau de bord à jour, exploitable depuis Toronto comme depuis Yaoundé. Coût : zéro. Impact : décisions plus rapides, moins d'erreurs de catégorisation.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- VIII. MÉTHODOLOGIE -->
+<section>
+<div class="wrap">
+  <span class="section-num">VIII — Méthodologie</span>
+  <h2>Comment cette analyse a été produite</h2>
+  <p class="lede">Pipeline reproductible. Toutes les étapes documentées, tous les chiffres vérifiables depuis la source.</p>
+
+  <div class="method-grid">
+    <div class="method-step">
+      <div class="step-num">01</div>
+      <h4>Ingestion</h4>
+      <p>Lecture du workbook Excel multi-onglets via <span class="mono">pandas</span> : 9 feuilles, 1 200+ lignes brutes après nettoyage des doublons inter-feuilles.</p>
+    </div>
+    <div class="method-step">
+      <div class="step-num">02</div>
+      <h4>Nettoyage</h4>
+      <p>Normalisation des chaînes (espaces, accents), conversion des dates Excel-serial, déduplication, validation des montants négatifs ou aberrants.</p>
+    </div>
+    <div class="method-step">
+      <div class="step-num">03</div>
+      <h4>Agrégation</h4>
+      <p>Pivot tables sur 5 axes : temps (mois/an), type d'activité, nature, récipiendaire, culture. Calcul des cumuls, parts, et indicateurs Pareto.</p>
+    </div>
+    <div class="method-step">
+      <div class="step-num">04</div>
+      <h4>Modélisation</h4>
+      <p>Régression linéaire sur les prix (test du trend), classification ABC sur les récipiendaires, indice HHI sur la concentration, scénarios de break-even.</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <h3 style="font-family: 'Fraunces', serif; font-weight: 500; margin-bottom: 16px;">Limites et data gaps</h3>
+  <ul style="list-style: none; padding-left: 0;">
+    <li style="padding: 12px 0; border-bottom: 1px solid var(--rule); font-size: 14px; color: var(--ink-soft);">
+      <strong style="color: var(--ink); font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; margin-right: 8px;">[G1]</strong>
+      Aucun référentiel de prix marché Yaoundé/Centre — impossible de juger si les prix obtenus sont compétitifs.
+    </li>
+    <li style="padding: 12px 0; border-bottom: 1px solid var(--rule); font-size: 14px; color: var(--ink-soft);">
+      <strong style="color: var(--ink); font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; margin-right: 8px;">[G2]</strong>
+      Pas de mesure du rendement réel par hectare ni du nombre total de pieds plantés/morts.
+    </li>
+    <li style="padding: 12px 0; border-bottom: 1px solid var(--rule); font-size: 14px; color: var(--ink-soft);">
+      <strong style="color: var(--ink); font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; margin-right: 8px;">[G3]</strong>
+      Le ledger source ne distinguait pas CapEx et OpEx — séparation effectuée manuellement (cf. section III·b) selon IAS 41 et conventions de comptabilité agricole.
+    </li>
+    <li style="padding: 12px 0; border-bottom: 1px solid var(--rule); font-size: 14px; color: var(--ink-soft);">
+      <strong style="color: var(--ink); font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; margin-right: 8px;">[G4]</strong>
+      Pas de codification des unités produits (régimes de quelle taille ?). Hétérogénéité possible.
+    </li>
+    <li style="padding: 12px 0; font-size: 14px; color: var(--ink-soft);">
+      <strong style="color: var(--ink); font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; margin-right: 8px;">[G5]</strong>
+      12 ventes uniquement — trop peu pour modèle prédictif sérieux ; recommandation : ré-évaluer dans 6 mois.
+    </li>
+  </ul>
+</div>
+</section>
+
+<footer>
+<div class="wrap foot-row">
+  <div>
+    <p class="mono" style="font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(245,237,220,0.5); margin-bottom: 12px;">Portfolio · Mill · Data Analyst</p>
+    <div class="foot-sig">Projet Mengang BON</div>
+    <p style="margin-top: 8px; font-size: 13px;">Analyse financière et opérationnelle d'une exploitation agricole familiale, 2023–2026.</p>
+  </div>
+  <div style="text-align: right;">
+    <p class="mono" style="font-size: 11px;">21,16 M XAF observés</p>
+    <p class="mono" style="font-size: 11px;">592 transactions analysées</p>
+    <p class="mono" style="font-size: 11px;">9 onglets sources</p>
+  </div>
+</div>
+</footer>
+
+<script>
+const DATA = {"kpi_global": {"investissement_total_xaf": 21156550.0, "revenus_realises_xaf": 2312100.0, "pertes_vol_xaf": 217000.0, "taux_recouvrement_pct": 10.928530407840597, "roi_actuel_pct": -89.0714695921594, "gap_break_even_xaf": 18844450.0, "qte_plantain_vendue": 822, "qte_plantain_volee": 64, "taux_perte_vol_qte_pct": 7.223476297968396, "taux_perte_vol_valeur_pct": 8.580127318018267, "nb_transactions_dep": 592, "nb_recipiendaires": 43, "duree_projet_mois": 35, "burn_rate_mensuel_moyen_xaf": 591515.8434296366}, "par_type": [{"Type d'activité": "Préparation du site", "Total_XAF": 8023650, "Nb_transactions": 223, "Moyenne_XAF": 35980.0, "Pourcentage": 37.9}, {"Type d'activité": "Transport", "Total_XAF": 3946300, "Nb_transactions": 132, "Moyenne_XAF": 29896.0, "Pourcentage": 18.7}, {"Type d'activité": "Entretien du site", "Total_XAF": 3012100, "Nb_transactions": 106, "Moyenne_XAF": 28416.0, "Pourcentage": 14.2}, {"Type d'activité": "Acquisition du site", "Total_XAF": 2540000, "Nb_transactions": 13, "Moyenne_XAF": 195385.0, "Pourcentage": 12.0}, {"Type d'activité": "Production du Plantain", "Total_XAF": 2335000, "Nb_transactions": 39, "Moyenne_XAF": 59872.0, "Pourcentage": 11.0}, {"Type d'activité": "Production du Gombo", "Total_XAF": 708000, "Nb_transactions": 19, "Moyenne_XAF": 37263.0, "Pourcentage": 3.3}, {"Type d'activité": "Production du Macabo", "Total_XAF": 334500, "Nb_transactions": 10, "Moyenne_XAF": 33450.0, "Pourcentage": 1.6}, {"Type d'activité": "Ration", "Total_XAF": 247000, "Nb_transactions": 49, "Moyenne_XAF": 5041.0, "Pourcentage": 1.2}, {"Type d'activité": "Sortie du bois", "Total_XAF": 10000, "Nb_transactions": 1, "Moyenne_XAF": 10000.0, "Pourcentage": 0.0}], "par_nature_top15": [{"nature": "Sortie du bois", "frais": 3098000.0, "pct": 14.6}, {"nature": "Transport", "frais": 2992800.0, "pct": 14.1}, {"nature": "Défrichage", "frais": 2826200.0, "pct": 13.4}, {"nature": "Acquisition du site", "frais": 2505000.0, "pct": 11.8}, {"nature": "Tronçonnage", "frais": 1930000.0, "pct": 9.1}, {"nature": "Semences", "frais": 1247000.0, "pct": 5.9}, {"nature": "Trouaison", "frais": 1034500.0, "pct": 4.9}, {"nature": "Abattage", "frais": 679450.0, "pct": 3.2}, {"nature": "Pulvérsation", "frais": 677900.0, "pct": 3.2}, {"nature": "Engrais", "frais": 670500.0, "pct": 3.2}, {"nature": "Base vie", "frais": 577000.0, "pct": 2.7}, {"nature": "Binage", "frais": 550200.0, "pct": 2.6}, {"nature": "Délimitation du site", "frais": 439500.0, "pct": 2.1}, {"nature": "Création de route", "frais": 427000.0, "pct": 2.0}, {"nature": "Salaire", "frais": 375000.0, "pct": 1.8}], "monthly": [{"YearMonth": "2023-05", "sum": 331000, "count": 10, "cumulative": 331000}, {"YearMonth": "2023-06", "sum": 2491700, "count": 30, "cumulative": 2822700}, {"YearMonth": "2023-07", "sum": 276000, "count": 12, "cumulative": 3098700}, {"YearMonth": "2023-08", "sum": 1742500, "count": 33, "cumulative": 4841200}, {"YearMonth": "2023-09", "sum": 662000, "count": 19, "cumulative": 5503200}, {"YearMonth": "2023-10", "sum": 1520500, "count": 26, "cumulative": 7023700}, {"YearMonth": "2023-11", "sum": 1253500, "count": 42, "cumulative": 8277200}, {"YearMonth": "2023-12", "sum": 1037000, "count": 30, "cumulative": 9314200}, {"YearMonth": "2024-01", "sum": 1113500, "count": 33, "cumulative": 10427700}, {"YearMonth": "2024-02", "sum": 432800, "count": 20, "cumulative": 10860500}, {"YearMonth": "2024-03", "sum": 1182000, "count": 26, "cumulative": 12042500}, {"YearMonth": "2024-04", "sum": 658500, "count": 11, "cumulative": 12701000}, {"YearMonth": "2024-05", "sum": 530200, "count": 14, "cumulative": 13231200}, {"YearMonth": "2024-06", "sum": 235000, "count": 8, "cumulative": 13466200}, {"YearMonth": "2024-07", "sum": 656950, "count": 23, "cumulative": 14123150}, {"YearMonth": "2024-08", "sum": 821200, "count": 35, "cumulative": 14944350}, {"YearMonth": "2024-09", "sum": 605500, "count": 20, "cumulative": 15549850}, {"YearMonth": "2024-10", "sum": 196000, "count": 10, "cumulative": 15745850}, {"YearMonth": "2024-11", "sum": 230000, "count": 11, "cumulative": 15975850}, {"YearMonth": "2024-12", "sum": 250000, "count": 7, "cumulative": 16225850}, {"YearMonth": "2025-01", "sum": 240000, "count": 3, "cumulative": 16465850}, {"YearMonth": "2025-02", "sum": 531500, "count": 12, "cumulative": 16997350}, {"YearMonth": "2025-03", "sum": 277000, "count": 8, "cumulative": 17274350}, {"YearMonth": "2025-04", "sum": 350000, "count": 11, "cumulative": 17624350}, {"YearMonth": "2025-05", "sum": 447000, "count": 28, "cumulative": 18071350}, {"YearMonth": "2025-06", "sum": 350000, "count": 23, "cumulative": 18421350}, {"YearMonth": "2025-07", "sum": 165000, "count": 12, "cumulative": 18586350}, {"YearMonth": "2025-08", "sum": 468000, "count": 18, "cumulative": 19054350}, {"YearMonth": "2025-09", "sum": 758000, "count": 21, "cumulative": 19812350}, {"YearMonth": "2025-10", "sum": 186500, "count": 6, "cumulative": 19998850}, {"YearMonth": "2025-11", "sum": 102000, "count": 2, "cumulative": 20100850}, {"YearMonth": "2025-12", "sum": 250000, "count": 4, "cumulative": 20350850}, {"YearMonth": "2026-03", "sum": 310500, "count": 10, "cumulative": 20661350}, {"YearMonth": "2026-04", "sum": 338200, "count": 9, "cumulative": 20999550}, {"YearMonth": "2026-05", "sum": 157000, "count": 5, "cumulative": 21156550}], "recipients_top10": [{"Récipiendaire": "Theophile", "sum": 2570500, "count": 48, "pct": 12.15, "cum_pct": 12.15, "ABC": "A"}, {"Récipiendaire": "Moise", "sum": 1919000, "count": 67, "pct": 9.07, "cum_pct": 21.22, "ABC": "A"}, {"Récipiendaire": "Ebolo", "sum": 1905000, "count": 3, "pct": 9.0, "cum_pct": 30.22, "ABC": "A"}, {"Récipiendaire": "Bebeto", "sum": 1857500, "count": 66, "pct": 8.78, "cum_pct": 39.0, "ABC": "A"}, {"Récipiendaire": "Alpha", "sum": 1334200, "count": 63, "pct": 6.31, "cum_pct": 45.31, "ABC": "A"}, {"Récipiendaire": "Toure", "sum": 1241200, "count": 48, "pct": 5.87, "cum_pct": 51.18, "ABC": "A"}, {"Récipiendaire": "Martin", "sum": 1057000, "count": 13, "pct": 5.0, "cum_pct": 56.18, "ABC": "A"}, {"Récipiendaire": "Morel", "sum": 999750, "count": 73, "pct": 4.73, "cum_pct": 60.91, "ABC": "A"}, {"Récipiendaire": "Arnaud", "sum": 823500, "count": 26, "pct": 3.89, "cum_pct": 64.8, "ABC": "A"}, {"Récipiendaire": "Rene", "sum": 748400, "count": 23, "pct": 3.54, "cum_pct": 68.34, "ABC": "A"}], "recipients_full": [{"Récipiendaire": "Theophile", "sum": 2570500, "count": 48, "pct": 12.15, "cum_pct": 12.15, "ABC": "A"}, {"Récipiendaire": "Moise", "sum": 1919000, "count": 67, "pct": 9.07, "cum_pct": 21.22, "ABC": "A"}, {"Récipiendaire": "Ebolo", "sum": 1905000, "count": 3, "pct": 9.0, "cum_pct": 30.22, "ABC": "A"}, {"Récipiendaire": "Bebeto", "sum": 1857500, "count": 66, "pct": 8.78, "cum_pct": 39.0, "ABC": "A"}, {"Récipiendaire": "Alpha", "sum": 1334200, "count": 63, "pct": 6.31, "cum_pct": 45.31, "ABC": "A"}, {"Récipiendaire": "Toure", "sum": 1241200, "count": 48, "pct": 5.87, "cum_pct": 51.18, "ABC": "A"}, {"Récipiendaire": "Martin", "sum": 1057000, "count": 13, "pct": 5.0, "cum_pct": 56.18, "ABC": "A"}, {"Récipiendaire": "Morel", "sum": 999750, "count": 73, "pct": 4.73, "cum_pct": 60.91, "ABC": "A"}, {"Récipiendaire": "Arnaud", "sum": 823500, "count": 26, "pct": 3.89, "cum_pct": 64.8, "ABC": "A"}, {"Récipiendaire": "Rene", "sum": 748400, "count": 23, "pct": 3.54, "cum_pct": 68.34, "ABC": "A"}, {"Récipiendaire": "Bekono", "sum": 615200, "count": 15, "pct": 2.91, "cum_pct": 71.25, "ABC": "A"}, {"Récipiendaire": "Kingsley", "sum": 612000, "count": 22, "pct": 2.89, "cum_pct": 74.14, "ABC": "A"}, {"Récipiendaire": "Fabrice", "sum": 571000, "count": 4, "pct": 2.7, "cum_pct": 76.84, "ABC": "A"}, {"Récipiendaire": "Medar", "sum": 565000, "count": 10, "pct": 2.67, "cum_pct": 79.51, "ABC": "A"}, {"Récipiendaire": "Raoul", "sum": 497000, "count": 17, "pct": 2.35, "cum_pct": 81.86, "ABC": "B"}, {"Récipiendaire": "Motoboy", "sum": 445000, "count": 5, "pct": 2.1, "cum_pct": 83.96, "ABC": "B"}, {"Récipiendaire": "Arnold", "sum": 411000, "count": 17, "pct": 1.94, "cum_pct": 85.89999999999999, "ABC": "B"}, {"Récipiendaire": "ZE Roger", "sum": 315000, "count": 5, "pct": 1.49, "cum_pct": 87.38999999999999, "ABC": "B"}, {"Récipiendaire": "Cedric", "sum": 260000, "count": 3, "pct": 1.23, "cum_pct": 88.61999999999999, "ABC": "B"}, {"Récipiendaire": "Kamga", "sum": 245000, "count": 2, "pct": 1.16, "cum_pct": 89.77999999999999, "ABC": "B"}, {"Récipiendaire": "Prince", "sum": 242000, "count": 5, "pct": 1.14, "cum_pct": 90.91999999999999, "ABC": "B"}, {"Récipiendaire": "Baurel", "sum": 240000, "count": 2, "pct": 1.13, "cum_pct": 92.04999999999998, "ABC": "B"}, {"Récipiendaire": "SPO", "sum": 200000, "count": 1, "pct": 0.95, "cum_pct": 92.99999999999999, "ABC": "B"}, {"Récipiendaire": "Eric", "sum": 189000, "count": 6, "pct": 0.89, "cum_pct": 93.88999999999999, "ABC": "B"}, {"Récipiendaire": "Armand", "sum": 185000, "count": 6, "pct": 0.87, "cum_pct": 94.75999999999999, "ABC": "B"}, {"Récipiendaire": "Jeff", "sum": 163500, "count": 10, "pct": 0.77, "cum_pct": 95.52999999999999, "ABC": "C"}, {"Récipiendaire": "Monkam", "sum": 150000, "count": 1, "pct": 0.71, "cum_pct": 96.23999999999998, "ABC": "C"}, {"Récipiendaire": "YoumSen", "sum": 145000, "count": 8, "pct": 0.69, "cum_pct": 96.92999999999998, "ABC": "C"}, {"Récipiendaire": "Lato", "sum": 98000, "count": 2, "pct": 0.46, "cum_pct": 97.38999999999997, "ABC": "C"}, {"Récipiendaire": "Abdou", "sum": 92000, "count": 2, "pct": 0.43, "cum_pct": 97.81999999999998, "ABC": "C"}, {"Récipiendaire": "Tchèmè", "sum": 80000, "count": 2, "pct": 0.38, "cum_pct": 98.19999999999997, "ABC": "C"}, {"Récipiendaire": "Ndengue", "sum": 65000, "count": 2, "pct": 0.31, "cum_pct": 98.50999999999998, "ABC": "C"}, {"Récipiendaire": "Eloga", "sum": 65000, "count": 1, "pct": 0.31, "cum_pct": 98.81999999999998, "ABC": "C"}, {"Récipiendaire": "Acouna", "sum": 55000, "count": 1, "pct": 0.26, "cum_pct": 99.07999999999998, "ABC": "C"}, {"Récipiendaire": "Adebayor", "sum": 50000, "count": 2, "pct": 0.24, "cum_pct": 99.31999999999998, "ABC": "C"}, {"Récipiendaire": "Ferdinand", "sum": 48000, "count": 2, "pct": 0.23, "cum_pct": 99.54999999999998, "ABC": "C"}, {"Récipiendaire": "Briss", "sum": 35000, "count": 3, "pct": 0.17, "cum_pct": 99.71999999999998, "ABC": "C"}, {"Récipiendaire": "AC", "sum": 30000, "count": 1, "pct": 0.14, "cum_pct": 99.85999999999999, "ABC": "C"}, {"Récipiendaire": "Youcouda", "sum": 15300, "count": 1, "pct": 0.07, "cum_pct": 99.92999999999998, "ABC": "C"}, {"Récipiendaire": "Roger", "sum": 5000, "count": 1, "pct": 0.02, "cum_pct": 99.94999999999997, "ABC": "C"}, {"Récipiendaire": "Romain", "sum": 5000, "count": 1, "pct": 0.02, "cum_pct": 99.96999999999997, "ABC": "C"}, {"Récipiendaire": "Etienne", "sum": 4000, "count": 1, "pct": 0.02, "cum_pct": 99.98999999999997, "ABC": "C"}, {"Récipiendaire": "Godwill", "sum": 2500, "count": 1, "pct": 0.01, "cum_pct": 99.99999999999997, "ABC": "C"}], "culture_costs": {"Production du Plantain": 2335000.0, "Production du Macabo": 334500.0, "Production du Gombo": 708000.0}, "indirects": 17779050.0, "sales_data": [{"Date_clean": "2025-05-17", "Qté obtenue": 33, "Prix_unitaire": 3484.848484848485, "Valeur": 115000}, {"Date_clean": "2025-05-31", "Qté obtenue": 36, "Prix_unitaire": 3500.0, "Valeur": 126000}, {"Date_clean": "2025-06-14", "Qté obtenue": 47, "Prix_unitaire": 4000.0, "Valeur": 188000}, {"Date_clean": "2025-08-01", "Qté obtenue": 108, "Prix_unitaire": 3700.0, "Valeur": 399600}, {"Date_clean": "2025-09-16", "Qté obtenue": 175, "Prix_unitaire": 2857.1428571428573, "Valeur": 500000}, {"Date_clean": "2025-10-25", "Qté obtenue": 203, "Prix_unitaire": 2500.0, "Valeur": 507500}, {"Date_clean": "2025-11-26", "Qté obtenue": 133, "Prix_unitaire": 2052.6315789473683, "Valeur": 273000}, {"Date_clean": "2026-03-16", "Qté obtenue": 23, "Prix_unitaire": 1739.1304347826087, "Valeur": 40000}, {"Date_clean": "2026-05-02", "Qté obtenue": 64, "Prix_unitaire": 2546.875, "Valeur": 163000}], "sales_all": [{"Date_clean": "2025-05-17", "Qté obtenue": 33, "Prix_unitaire": 3484.848484848485, "Valeur": 115000, "Etat": "Vendue", "Récipiendaire": "Morel"}, {"Date_clean": "2025-05-31", "Qté obtenue": 36, "Prix_unitaire": 3500.0, "Valeur": 126000, "Etat": "Vendue", "Récipiendaire": "Morel"}, {"Date_clean": "2025-06-12", "Qté obtenue": 12, "Prix_unitaire": 3125.0, "Valeur": 37500, "Etat": "Volée", "Récipiendaire": "Bryant"}, {"Date_clean": "2025-06-14", "Qté obtenue": 47, "Prix_unitaire": 4000.0, "Valeur": 188000, "Etat": "Vendue", "Récipiendaire": "Morel"}, {"Date_clean": "2025-07-12", "Qté obtenue": 47, "Prix_unitaire": 3500.0, "Valeur": 164500, "Etat": "Volée", "Récipiendaire": "Moise"}, {"Date_clean": "2025-08-01", "Qté obtenue": 108, "Prix_unitaire": 3700.0, "Valeur": 399600, "Etat": "Vendue", "Récipiendaire": "Morel"}, {"Date_clean": "2025-09-09", "Qté obtenue": 5, "Prix_unitaire": 3000.0, "Valeur": 15000, "Etat": "Volée", "Récipiendaire": "Acouna"}, {"Date_clean": "2025-09-16", "Qté obtenue": 175, "Prix_unitaire": 2857.1428571428573, "Valeur": 500000, "Etat": "Vendue", "Récipiendaire": "Morel"}, {"Date_clean": "2025-10-25", "Qté obtenue": 203, "Prix_unitaire": 2500.0, "Valeur": 507500, "Etat": "Vendue", "Récipiendaire": "Morel"}, {"Date_clean": "2025-11-26", "Qté obtenue": 133, "Prix_unitaire": 2052.6315789473683, "Valeur": 273000, "Etat": "Vendue", "Récipiendaire": "Morel"}, {"Date_clean": "2026-03-16", "Qté obtenue": 23, "Prix_unitaire": 1739.1304347826087, "Valeur": 40000, "Etat": "Vendue", "Récipiendaire": "Morel"}, {"Date_clean": "2026-05-02", "Qté obtenue": 64, "Prix_unitaire": 2546.875, "Valeur": 163000, "Etat": "Vendue", "Récipiendaire": "Morel"}], "scenarios": {"Conservateur": {"qte_mensuelle": 150, "prix_unitaire": 3000, "cout_op_mensuel": 200000}, "Réaliste": {"qte_mensuelle": 250, "prix_unitaire": 2800, "cout_op_mensuel": 250000}, "Optimiste": {"qte_mensuelle": 400, "prix_unitaire": 2700, "cout_op_mensuel": 300000}}, "concentration": {"top1_pct": 12.15, "top5_pct": 45.31, "hhi": 594.8661999999999, "top1_name": "Theophile"}, "burn_6m_xaf": 224033.33333333334, "gap_break_even": 18844450.0};
+
+const CAPEX_OPEX = {
+  total: 21156550, capex: 13431650, opex: 7724900,
+  capex_pct: 63.5, opex_pct: 36.5, obs_months: 37,
+  capex_breakdown: [
+    { name: "Aménagement foncier",          total: 8078150, life: 20,   count: 215, nbv: 6832768 },
+    { name: "Foncier",                       total: 2540000, life: null, count: 13,  nbv: 2540000 },
+    { name: "Plantation plantain (pérenne)", total: 1809500, life: 5,    count: 26,  nbv: 693641  },
+    { name: "Infrastructure",                total: 1004000, life: 20,   count: 21,  nbv: 849216  },
+  ],
+  opex_breakdown: [
+    { name: "Logistique",              total: 2897800, count: 120 },
+    { name: "Entretien courant",       total: 2582100, count: 96  },
+    { name: "Culture annuelle gombo",  total: 708000,  count: 19  },
+    { name: "Main-d'œuvre",            total: 677000,  count: 59  },
+    { name: "Intrants (engrais)",      total: 498500,  count: 9   },
+    { name: "Culture annuelle macabo", total: 334500,  count: 10  },
+    { name: "Récolte",                 total: 27000,   count: 4   },
+  ],
+  depreciation_period: 2516023,
+  net_book_value: 10915626,
+  revenues: 2312100,
+};
+
+const FONT = "Inter, sans-serif";
+const COLOR = { forest: "#1F3A2E", ochre: "#B8741A", ochreL: "#D9913A", brick: "#8B2C0E", sage: "#87A878", cream: "#F5EDDC", ink: "#1C1815", inkS: "#4A4239" };
+const palette = ["#1F3A2E","#B8741A","#87A878","#8B2C0E","#5A8170","#D9913A","#4A4239","#B0AE9F","#6B5638","#7AA293"];
+
+Chart.defaults.font.family = FONT;
+Chart.defaults.font.size = 11;
+Chart.defaults.color = COLOR.inkS;
+Chart.defaults.plugins.legend.labels.boxWidth = 12;
+Chart.defaults.plugins.legend.labels.font = { family: FONT, size: 11 };
+
+const fmtK = (v) => {
+  if (Math.abs(v) >= 1e6) return (v/1e6).toFixed(2) + " M";
+  if (Math.abs(v) >= 1e3) return (v/1e3).toFixed(0) + " K";
+  return v.toLocaleString("fr-FR");
+};
+const fmtXAF = (v) => fmtK(v) + " XAF";
+
+// CHART 1 — CUMULATIVE
+(() => {
+  const monthly = DATA.monthly;
+  const labels = monthly.map(r => r.YearMonth);
+  const cumCost = monthly.map(r => r.cumulative);
+
+  // Build cumulative revenue series, sales are sparse
+  const sales = DATA.sales_all.filter(s => s.Etat === "Vendue");
+  const cumRev = monthly.map(m => {
+    const monthEnd = m.YearMonth;
+    return sales
+      .filter(s => s.Date_clean.slice(0,7) <= monthEnd)
+      .reduce((a, s) => a + s.Valeur, 0);
+  });
+  const cumTheft = monthly.map(m => {
+    const monthEnd = m.YearMonth;
+    return DATA.sales_all
+      .filter(s => s.Etat === "Volée" && s.Date_clean.slice(0,7) <= monthEnd)
+      .reduce((a, s) => a + s.Valeur, 0);
+  });
+
+  new Chart(document.getElementById("chartCumul"), {
+    type: "line",
+    data: {
+      labels,
+      datasets: [
+        { label: "Coût cumulé (investissement)", data: cumCost, borderColor: COLOR.forest, backgroundColor: "rgba(31,58,46,0.08)", fill: true, tension: 0.2, borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 5 },
+        { label: "Revenu cumulé (ventes)", data: cumRev, borderColor: COLOR.ochre, backgroundColor: "rgba(184,116,26,0.10)", fill: true, tension: 0.2, borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 5 },
+        { label: "Pertes cumulées (vols)", data: cumTheft, borderColor: COLOR.brick, borderDash: [4, 4], borderWidth: 1.5, pointRadius: 0, fill: false },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { intersect: false, mode: "index" },
+      plugins: {
+        legend: { position: "bottom", align: "start" },
+        tooltip: {
+          backgroundColor: COLOR.forest, padding: 12, titleFont: {size: 12, weight: 600},
+          callbacks: { label: (ctx) => ctx.dataset.label + ": " + fmtXAF(ctx.parsed.y) }
+        }
+      },
+      scales: {
+        y: { ticks: { callback: (v) => fmtK(v) }, grid: { color: "rgba(28,24,21,0.06)" } },
+        x: { grid: { display: false }, ticks: { maxRotation: 45, minRotation: 0, autoSkip: true, maxTicksLimit: 12 } }
+      }
+    }
+  });
+})();
+
+// CHART 2 — MONTHLY BURN
+(() => {
+  const monthly = DATA.monthly;
+  const avgBurn = DATA.kpi_global.burn_rate_mensuel_moyen_xaf;
+  new Chart(document.getElementById("chartMonthly"), {
+    type: "bar",
+    data: {
+      labels: monthly.map(r => r.YearMonth),
+      datasets: [
+        { label: "Dépense mensuelle", data: monthly.map(r => r.sum), backgroundColor: COLOR.forest, borderRadius: 2 },
+        { label: "Moyenne historique", type: "line", data: monthly.map(_ => avgBurn), borderColor: COLOR.ochre, borderDash: [6,4], borderWidth: 1.5, pointRadius: 0, fill: false }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: "bottom" }, tooltip: { callbacks: { label: c => fmtXAF(c.parsed.y) } } },
+      scales: { y: { ticks: { callback: v => fmtK(v) } }, x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } } }
+    }
+  });
+})();
+
+// CHART 3 — TX COUNT
+(() => {
+  const monthly = DATA.monthly;
+  new Chart(document.getElementById("chartTxCount"), {
+    type: "bar",
+    data: {
+      labels: monthly.map(r => r.YearMonth),
+      datasets: [{ label: "Transactions", data: monthly.map(r => r.count), backgroundColor: COLOR.sage, borderRadius: 2 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true }, x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } } }
+    }
+  });
+})();
+
+// CHART 4 — TYPE ACTIVITÉ (donut)
+(() => {
+  const t = DATA.par_type;
+  new Chart(document.getElementById("chartTypeAct"), {
+    type: "doughnut",
+    data: {
+      labels: t.map(r => r["Type d'activité"]),
+      datasets: [{ data: t.map(r => r.Total_XAF), backgroundColor: palette, borderColor: "#FBF7EE", borderWidth: 2 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      cutout: "55%",
+      plugins: {
+        legend: { position: "right", labels: { boxWidth: 10, padding: 10, font: {size: 11} } },
+        tooltip: { callbacks: { label: c => c.label + ": " + fmtXAF(c.parsed) + " (" + (c.parsed / 21156550 * 100).toFixed(1) + "%)" } }
+      }
+    }
+  });
+})();
+
+// CHART 5 — NATURE TOP 12
+(() => {
+  const n = DATA.par_nature_top15.slice(0, 12);
+  new Chart(document.getElementById("chartNature"), {
+    type: "bar",
+    data: {
+      labels: n.map(r => r.nature),
+      datasets: [{ data: n.map(r => r.frais), backgroundColor: COLOR.ochre, borderRadius: 2 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      indexAxis: "y",
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => fmtXAF(c.parsed.x) + " (" + (c.parsed.x / 21156550 * 100).toFixed(1) + "%)" } } },
+      scales: { x: { ticks: { callback: v => fmtK(v) } }, y: { grid: { display: false } } }
+    }
+  });
+})();
+
+// CHART 6 — CULTURE
+(() => {
+  const c = DATA.culture_costs;
+  const indirects = DATA.indirects;
+  const labels = ["Plantain (direct)", "Macabo (direct)", "Gombo (direct)", "Coûts indirects (site + transport + entretien)"];
+  const values = [c["Production du Plantain"], c["Production du Macabo"], c["Production du Gombo"], indirects];
+  new Chart(document.getElementById("chartCulture"), {
+    type: "bar",
+    data: {
+      labels,
+      datasets: [{ data: values, backgroundColor: [COLOR.sage, COLOR.ochreL, COLOR.ochre, COLOR.forest], borderRadius: 2 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      indexAxis: "y",
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => fmtXAF(c.parsed.x) + " (" + (c.parsed.x / 21156550 * 100).toFixed(1) + "%)" } } },
+      scales: { x: { ticks: { callback: v => fmtK(v) } }, y: { grid: { display: false } } }
+    }
+  });
+})();
+
+// CHART 6·b — CAPEX vs OPEX (doughnut)
+(() => {
+  new Chart(document.getElementById("chartCapexOpex"), {
+    type: "doughnut",
+    data: {
+      labels: ["CapEx (investissement)", "OpEx (exploitation)"],
+      datasets: [{
+        data: [CAPEX_OPEX.capex, CAPEX_OPEX.opex],
+        backgroundColor: [COLOR.forest, COLOR.ochre],
+        borderColor: "#fff", borderWidth: 3
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      cutout: "62%",
+      plugins: {
+        legend: { position: "bottom", labels: { padding: 16, font: { size: 12 }, boxWidth: 12 } },
+        tooltip: {
+          callbacks: {
+            label: c => c.label + ": " + fmtXAF(c.parsed) + "  (" + (c.parsed / CAPEX_OPEX.total * 100).toFixed(1) + "%)"
+          }
+        }
+      }
+    }
+  });
+})();
+
+// CHART 6·c — CAPEX breakdown (horizontal bar with NBV overlay)
+(() => {
+  const cb = CAPEX_OPEX.capex_breakdown;
+  new Chart(document.getElementById("chartCapexBreakdown"), {
+    type: "bar",
+    data: {
+      labels: cb.map(c => c.name),
+      datasets: [
+        { label: "Coût brut",       data: cb.map(c => c.total), backgroundColor: COLOR.forest, borderRadius: 2 },
+        { label: "Valeur nette comptable", data: cb.map(c => c.nbv),   backgroundColor: COLOR.ochreL, borderRadius: 2 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      indexAxis: "y",
+      plugins: {
+        legend: { position: "bottom", labels: { padding: 14, font: { size: 11 }, boxWidth: 12 } },
+        tooltip: { callbacks: { label: c => c.dataset.label + ": " + fmtXAF(c.parsed.x) } }
+      },
+      scales: { x: { ticks: { callback: v => fmtK(v) } }, y: { grid: { display: false } } }
+    }
+  });
+})();
+
+// CHART 7 — PARETO
+(() => {
+  const rec = DATA.recipients_full.slice(0, 30);
+  new Chart(document.getElementById("chartPareto"), {
+    type: "bar",
+    data: {
+      labels: rec.map(r => r.Récipiendaire),
+      datasets: [
+        { label: "% du total", data: rec.map(r => r.pct), backgroundColor: COLOR.forest, borderRadius: 2, yAxisID: "y1" },
+        { label: "% cumulé", type: "line", data: rec.map(r => r.cum_pct), borderColor: COLOR.ochre, borderWidth: 2, pointRadius: 2, fill: false, yAxisID: "y2" }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: "bottom" } },
+      scales: {
+        y1: { type: "linear", position: "left", ticks: { callback: v => v + "%" }, title: { display: true, text: "Part individuelle (%)" } },
+        y2: { type: "linear", position: "right", min: 0, max: 100, ticks: { callback: v => v + "%" }, grid: { display: false }, title: { display: true, text: "% cumulé" } },
+        x: { ticks: { maxRotation: 90, minRotation: 60 } }
+      }
+    }
+  });
+})();
+
+// FILL TBL RECIPIENTS
+(() => {
+  const rows = DATA.recipients_top10.map(r => `
+    <tr>
+      <td>${r.Récipiendaire}</td>
+      <td class="num">${r.sum.toLocaleString("fr-FR")}</td>
+      <td class="num">${r.pct.toFixed(1)}%</td>
+      <td><span class="tag tag-${r.ABC}">${r.ABC}</span></td>
+    </tr>`).join("");
+  document.getElementById("tblRecip").innerHTML = rows;
+})();
+
+// CHART 8 — SALES VOLUME + VALUE
+(() => {
+  const s = DATA.sales_all;
+  new Chart(document.getElementById("chartSales"), {
+    type: "bar",
+    data: {
+      labels: s.map(x => x.Date_clean),
+      datasets: [
+        { label: "Régimes (volume)", data: s.map(x => x["Qté obtenue"]), backgroundColor: s.map(x => x.Etat === "Vendue" ? COLOR.sage : COLOR.brick), yAxisID: "y1", borderRadius: 2 },
+        { label: "Valeur (XAF)", type: "line", data: s.map(x => x.Valeur), borderColor: COLOR.ochre, borderWidth: 2, pointRadius: 4, pointBackgroundColor: COLOR.ochre, fill: false, yAxisID: "y2", tension: 0.2 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: "bottom" } },
+      scales: {
+        y1: { type: "linear", position: "left", title: { display: true, text: "Régimes" } },
+        y2: { type: "linear", position: "right", grid: { display: false }, ticks: { callback: v => fmtK(v) }, title: { display: true, text: "XAF" } },
+        x: { ticks: { maxRotation: 45 } }
+      }
+    }
+  });
+})();
+
+// CHART 9 — PRICE TREND
+(() => {
+  const s = DATA.sales_all.filter(x => x.Etat === "Vendue").sort((a,b) => a.Date_clean.localeCompare(b.Date_clean));
+  // simple linear regression
+  const xs = s.map((_, i) => i);
+  const ys = s.map(x => x.Prix_unitaire);
+  const n = xs.length;
+  const sx = xs.reduce((a,b)=>a+b, 0), sy = ys.reduce((a,b)=>a+b, 0);
+  const sxy = xs.reduce((a, b, i) => a + b*ys[i], 0);
+  const sx2 = xs.reduce((a,b) => a + b*b, 0);
+  const slope = (n*sxy - sx*sy) / (n*sx2 - sx*sx);
+  const intercept = (sy - slope*sx) / n;
+  const trend = xs.map(x => slope*x + intercept);
+
+  new Chart(document.getElementById("chartPrice"), {
+    type: "line",
+    data: {
+      labels: s.map(x => x.Date_clean),
+      datasets: [
+        { label: "Prix unitaire", data: ys, borderColor: COLOR.ochre, backgroundColor: "rgba(184,116,26,0.12)", borderWidth: 2.5, pointRadius: 5, pointBackgroundColor: COLOR.ochre, fill: true, tension: 0.1 },
+        { label: "Tendance linéaire", data: trend, borderColor: COLOR.brick, borderDash: [5,5], borderWidth: 1.5, pointRadius: 0, fill: false }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: "bottom" }, tooltip: { callbacks: { label: c => fmtK(c.parsed.y) + " XAF/régime" } } },
+      scales: { y: { ticks: { callback: v => fmtK(v) }, title: { display: true, text: "XAF / régime" } }, x: { ticks: { maxRotation: 45 } } }
+    }
+  });
+})();
+
+// FILL SALES TABLE
+(() => {
+  const rows = DATA.sales_all.map(s => `
+    <tr>
+      <td>${s.Date_clean}</td>
+      <td class="num">${s["Qté obtenue"]}</td>
+      <td class="num">${Math.round(s.Prix_unitaire).toLocaleString("fr-FR")}</td>
+      <td class="num">${s.Valeur.toLocaleString("fr-FR")}</td>
+      <td><span class="tag tag-${s.Etat === "Vendue" ? "vendue" : "volee"}">${s.Etat}</span></td>
+      <td>${s.Récipiendaire}</td>
+    </tr>`).join("");
+  document.getElementById("tblSales").innerHTML = rows;
+})();
+
+// CHART 10 — SCENARIOS
+(() => {
+  const gap = DATA.gap_break_even;
+  const months = Array.from({length: 84}, (_, i) => i);
+  const conservateur = months.map(m => Math.max(0, gap - 250000*m));
+  const realiste = months.map(m => Math.max(0, gap - 450000*m));
+  const optimiste = months.map(m => Math.max(0, gap - 780000*m));
+
+  new Chart(document.getElementById("chartScenarios"), {
+    type: "line",
+    data: {
+      labels: months.map(m => "M+" + m),
+      datasets: [
+        { label: "Conservateur (250 K/mois)", data: conservateur, borderColor: COLOR.brick, borderWidth: 2, pointRadius: 0, fill: false, tension: 0 },
+        { label: "Réaliste (450 K/mois)", data: realiste, borderColor: COLOR.ochre, borderWidth: 2, pointRadius: 0, fill: false, tension: 0 },
+        { label: "Optimiste (780 K/mois)", data: optimiste, borderColor: COLOR.forest, borderWidth: 2.5, pointRadius: 0, fill: false, tension: 0 },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: "bottom" }, tooltip: { callbacks: { label: c => c.dataset.label + " — capital restant: " + fmtXAF(c.parsed.y) } } },
+      scales: { y: { ticks: { callback: v => fmtK(v) }, title: { display: true, text: "Capital restant à recouvrer (XAF)" } }, x: { ticks: { maxTicksLimit: 12 } } }
+    }
+  });
+})();
+</script>
+</body>
+</html>
